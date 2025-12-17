@@ -1,8 +1,22 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, useIonViewDidEnter } from '@ionic/react';
 import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle } from '@ionic/react';
 import './Tab3.css';
+import { getUserInfo } from '../services/GithubService';
+import { UserInfo } from '../interfaces/UserInfo';
+import { useState } from 'react';
 
 const Tab3: React.FC = () => {
+  const[userInfo, setUserInfo] = useState<UserInfo | null>(null);
+
+  const loadUserInfo = async () => {
+    const info = await getUserInfo();
+    setUserInfo(info);
+  };
+
+  useIonViewDidEnter(() =>{
+    loadUserInfo();
+  })
+
   return (
     <IonPage>
       <IonHeader>
@@ -17,14 +31,16 @@ const Tab3: React.FC = () => {
           </IonToolbar>
         </IonHeader>
         <IonCard>
-      <img alt="Silhouette of mountains" 
-      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSMVNc5RWFvJK0zWpyV5ovXIEDwLA3YKPVG9Q&s" />
+      <img alt={userInfo?.name} 
+      src={userInfo?.avatar_url} />
       <IonCardHeader>
-        <IonCardTitle>Arely Pazmiño</IonCardTitle>
-        <IonCardSubtitle>ArelyPa</IonCardSubtitle>
+        <IonCardTitle>{userInfo?.name}</IonCardTitle>
+        <IonCardSubtitle>{userInfo?.login}</IonCardSubtitle>
       </IonCardHeader>
 
-      <IonCardContent>Estudiante de la carrera de Ingeniería en Informática.</IonCardContent>
+      <IonCardContent>
+        {userInfo?.bio}
+        </IonCardContent>
     </IonCard>
       </IonContent>
     </IonPage>
