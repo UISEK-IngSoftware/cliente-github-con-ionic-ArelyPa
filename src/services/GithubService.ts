@@ -5,8 +5,13 @@ import AuthService from "./AuthService";
 
 const GITHUB_API_URL = import.meta.env.VITE_API_URL;
 
+/* Configuración de Axios (URL)*/
 const githubApi = axios.create({
     baseURL: GITHUB_API_URL,
+    /*headers: {
+        "Cache-Control": "no-cache, no-store, must-revalidate",
+        "Pragma": "no-cache"
+    }*/
 });
 
 githubApi.interceptors.request.use((config)=>{
@@ -28,6 +33,7 @@ export const fetchRepositories = async (): Promise<RepositoryItem[]> => {
                 sort: "created",
                 direction: "desc",
                 affiliation: "owner",
+                t: Date.now()
             }
         });
         const repositories: RepositoryItem[] = response.data.map((repo:any) => ({
@@ -104,9 +110,3 @@ export const deleteRepository = async (
     }
 };
 
-/* Estado de carga genérico */
-export interface ApiState<T> {
-    loading: boolean;
-    data: T | null;
-    error: string | null;
-}

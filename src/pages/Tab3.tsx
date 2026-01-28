@@ -7,14 +7,18 @@ import { useState } from 'react';
 import { logOutOutline } from 'ionicons/icons';
 import { useHistory } from 'react-router';
 import AuthService from '../services/AuthService';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 const Tab3: React.FC = () => {
-  const[userInfo, setUserInfo] = useState<UserInfo | null>(null);
+  const [loading, setLoading ] = useState(false);
+  const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
   const history = useHistory();
 
   const loadUserInfo = async () => {
+    setLoading (true);
     const info = await getUserInfo();
     setUserInfo(info);
+    setLoading (false);
   };
 
   useIonViewDidEnter(() =>{
@@ -60,7 +64,7 @@ const Tab3: React.FC = () => {
         Cerrar Sesión
       </IonButton>
        
-        
+        <LoadingSpinner isOpen={loading} />
       </IonContent>
     </IonPage>
   );

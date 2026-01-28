@@ -1,28 +1,22 @@
-import { IonContent, IonHeader, IonList, IonPage, IonTitle, IonToolbar, useIonViewDidEnter, IonSpinner,
+import { IonContent, IonHeader, IonList, IonPage, IonTitle, IonToolbar, useIonViewDidEnter,
   IonText, IonAlert} from '@ionic/react';
-
 import { useState } from 'react';
 import './Tab1.css';
 import RepoItem from '../components/RepoItem';
 import { RepositoryItem } from '../interfaces/RepositoryItem';
-import {
-  fetchRepositories,
-  deleteRepository,
-  updateRepository
-} from '../services/GithubService';
+import { fetchRepositories, deleteRepository, updateRepository} from '../services/GithubService';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 const Tab1: React.FC = () => {
-  const [repos, setRepos] = useState<RepositoryItem[]>([]);
-
-  /* Estados */
   const [loading, setLoading] = useState(false);
+  const [repos, setRepos] = useState<RepositoryItem[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [selectedRepo, setSelectedRepo] = useState<RepositoryItem | null>(null);
 
+  /*Llama a la Api */
   const loadRepos = async () => {
     setLoading(true);
     setError(null);
-
     try {
       const reposData = await fetchRepositories();
       setRepos(reposData);
@@ -68,9 +62,6 @@ const Tab1: React.FC = () => {
           </IonToolbar>
         </IonHeader>
 
-        {/* Loading */}
-        {loading && <IonSpinner className="ion-padding" />}
-
         {/* Error */}
         {error && (
           <IonText color="danger" className="ion-padding">
@@ -90,7 +81,7 @@ const Tab1: React.FC = () => {
           ))}
         </IonList>
 
-        {/* Alerta */}
+        {/* Editar repositorio */}
         <IonAlert
           isOpen={!!selectedRepo}
           header="Editar repositorio"
@@ -120,6 +111,7 @@ const Tab1: React.FC = () => {
           ]}
           onDidDismiss={() => setSelectedRepo(null)}
         />
+        <LoadingSpinner isOpen={loading} />
       </IonContent>
     </IonPage>
   );

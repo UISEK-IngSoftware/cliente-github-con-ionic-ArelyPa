@@ -1,6 +1,6 @@
 import { IonItem, IonLabel, IonThumbnail, IonIcon, IonItemSliding, IonItemOptions,IonItemOption } from '@ionic/react';
 import './RepoItem.css';
-import { useRef } from 'react';
+/*import { useRef } from 'react';*/
 import { RepositoryItem } from '../interfaces/RepositoryItem';
 import { create, trash } from 'ionicons/icons';
 
